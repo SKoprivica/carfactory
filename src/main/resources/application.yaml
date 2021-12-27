@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    platform: postgres
+    username: tatul
+    password: tatul123
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 30000 # maximum number of milliseconds that a client will wait for a connection
+      minimum-idle: 5 # minimum number of idle connections maintained by HikariCP in a connection pool
+      maximum-pool-size: 30 # maximum pool size (https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing)
+      idle-timeout: 600000 # maximum idle time in milliseconds for connection
+      max-lifetime: 1800000 # maximum lifetime in milliseconds of a connection in the pool after it is closed
+      pool-name: Tatul
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL82Dialect
+    generate-ddl: true
+
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    open-in-view: false
+  main:
+    allow-bean-definition-overriding: true
