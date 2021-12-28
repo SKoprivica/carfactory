@@ -5,6 +5,8 @@
 /.settings/
 /target/
 /logs/
+/node_modules/
+
 
 /.factorypath
 /.springBeans

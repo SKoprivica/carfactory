@@ -22,7 +22,7 @@ import java.util.List;
 public class CarFactoryController {
     private final VehicleDetailsRepository vehicleDetailsRepository;
     private final VehicleDetailsService vehicleDetailsService;
-    private final ParkingService garageService;
+    private final ParkingService parkingService;
 
 
     @GetMapping(value = "/vehicle")
@@ -43,10 +43,10 @@ public class CarFactoryController {
         return vehicleDetailsService.create(request);
     }
 
-    @GetMapping(value = "/garage/status")
+    @GetMapping(value = "/parking/status")
     @ResponseBody
-    public List<Parking> garageStatus() {
-        return garageService.getStatus();
+    public List<Parking> parkingStatus() {
+        return parkingService.getStatus();
     }
 
 }
