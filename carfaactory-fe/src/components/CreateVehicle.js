@@ -1,85 +1,358 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Form, Input, Button, Select, InputNumber, Checkbox } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  InputNumber,
+  Checkbox,
+  Switch
+} from "antd";
 import axios from "axios";
 
 const { Option } = Select;
 
 const layout = {
   labelCol: {
-    span: 8
+    span: 4,
   },
   wrapperCol: {
-    span: 16
-  }
+    span: 8,
+  },
 };
 /* eslint-disable no-template-curly-in-string */
 
-const truckTypes = ["TOW_TRUCK", "TANK_TRUCK"];
+const CATEGORY_CONST = {
+  CAR: {
+    type: "CAR",
+    title: "Car",
+    fields: [
+      {
+        fieldName: "seats",
+        label: "Seats",
+        component: <InputNumber />,
+      },
+      {
+        fieldName: "accessories",
+        label: "Accessories",
+        component: <InputNumber />,
+      },
+    ],
+  },
+  BUS: {
+    type: "BUS",
+    title: "Bus",
+    fields: [
+      {
+        fieldName: "standingPlaces",
+        label: "Standing Places",
+        component: <InputNumber />,
+      },
+      {
+        fieldName: "seatingPlaces",
+        label: "Seating Places",
+        component: <InputNumber />,
+      },
+    ],
+  },
+  TRUCK: {
+    type: "TRUCK",
+    title: "Truck",
+    fields: [
+      {
+        fieldName: "axlesNumber",
+        label: "Axles Number",
+        component: <InputNumber />,
+      },
+    ],
+  },
+};
 
-const busTypes = ["CITY_BUS", "INTERCITY_BUS"];
+const TYPE_LIST = {
+  CAR: {
+    name: "CAR",
+    fields: [
+      {
+        fieldName: "CLASSIC",
+      },
+      {
+        fieldName: "CABRIOLET",
+      },
+    ],
+  },
+  BUS: {
+    name: "BUS",
+    fields: [
+      {
+        fieldName: "CITY_BUS",
+      },
+      {
+        fieldName: "INTERCITY_BUS",
+      },
+    ],
+  },
+  TRUCK: {
+    name: "TRUCK",
+    fields: [
+      {
+        fieldName: "TOW_TRUCK",
+      },
+      {
+        fieldName: "TANK_TRUCK",
+      },
+    ],
+  },
+};
 
-const carTypes = ["CABRIOLET", "CLASSIC"];
+const TYPE_CONST = {
+  CLASSIC: {
+    type: "CLASSIC",
+    title: "Classic Car",
+    fields: [
+      {
+        fieldName: "roofRackStorage",
+        label: "Roof Rack Storage",
+        component: <InputNumber />,
+      },
+    ],
+  },
+  CABRIOLET: {
+    type: "CABRIOLET",
+    title: "Cabriolet Car",
+    fields: [
+      {
+        fieldName: "detachableHardtops",
+        label: "Detachable Hardtops",
+        component: <Switch />,
+      },
+    ],
+  },
+
+  INTERCITY_BUS: {
+    type: "INTERCITY_BUS",
+    title: "Inetercity Bus",
+    fields: [
+      {
+        fieldName: "luggageCapacity",
+        label: "Luggage Capacity",
+        component: <InputNumber />,
+      },
+    ],
+  },
+  CITY_BUS: {
+    type: "CITY_BUS",
+    title: "Inetercity Bus",
+    fields: [
+      {
+        fieldName: "articulated",
+        label: "Articulated",
+        component: <Checkbox />,
+      },
+    ],
+  },
+  TOW_TRUCK: {
+    type: "TOW_TRUCK",
+    title: "Tow Truck",
+    fields: [
+      {
+        fieldName: "tractionPower",
+        label: "Traction Power",
+        component: <InputNumber />,
+      },
+    ],
+  },
+  TANK_TRUCK: {
+    type: "TANK_TRUCK",
+    title: "Tank Truck",
+    fields: [
+      {
+        fieldName: "tankCapacity",
+        label: "Tank Capacity",
+        component: <InputNumber />,
+      },
+    ],
+  },
+};
 
 const validateMessages = {
   required: "${label} is required!",
   types: {
     email: "${label} is not a valid email!",
-    number: "${label} is not a valid number!"
+    number: "${label} is not a valid number!",
   },
   number: {
-    range: "${label} must be between ${min} and ${max}"
-  }
+    range: "${label} must be between ${min} and ${max}",
+  },
 };
 
 class CreateVehicle extends React.Component {
+  state = {
+    accessories: [],
+    articulated: false,
+    axlesNumber: null,
+    category: null,
+    colour: null,
+    detachableHardtops: false,
+    luggageCapacity: null,
+    name: null,
+    roofRackStorage: null,
+    seatingPlaces: null,
+    seats: null,
+    standingPlaces: null,
+    tankCapacity: null,
+    type: null,
+  };
+
+  formRef = React.createRef();
+
   onFinish = (values) => {
     console.log(values);
     axios
-      .post("http://localhost:8080/api/car-factory/vehicle/create", values.vehicle)
+      .post("http://localhost:5000/api/car-factory/vehicle/create", values)
       .then((p) => console.log(p))
       .catch((error) => console.log(error));
   };
+  onFieldsChange = (e, values) => {
+    console.log(e);
+    console.log(values);
+    const [field] = e;
+    console.log(field);
+    const [name] = field.name;
+    const { value } = field;
+    this.setState({ [name]: value });
+    if (name === "category") {
+      console.log(this.formRef)
+      this.formRef.current.setFieldsValue({
+        type: null,
+      });
+    }
+  };
+
+  getField({ fieldName, label, component }) {
+    return (
+      <Form.Item
+        key={fieldName}
+        name={fieldName}
+        label={label}
+        valuePropName="checked"
+      >
+        {component}
+      </Form.Item>
+    );
+  }
+
+  getFragment({ title, fields }) {
+    return (
+      <React.Fragment>
+        <h3>{title}</h3>
+        {fields.map((p) => this.getField(p))}
+      </React.Fragment>
+    );
+  }
+
+  getSpecificFormForCategory({ category }) {
+    if (category === CATEGORY_CONST.CAR.type) {
+      return this.getFragment(CATEGORY_CONST.CAR);
+    }
+    if (category === CATEGORY_CONST.BUS.type) {
+      return this.getFragment(CATEGORY_CONST.BUS);
+    }
+
+    if (category === CATEGORY_CONST.TRUCK.type) {
+      return this.getFragment(CATEGORY_CONST.TRUCK);
+    }
+
+    return <div />;
+  }
+
+  getTypeOptions({ category }) {
+    if (category === TYPE_LIST.CAR.name) {
+      return TYPE_LIST.CAR.fields.map(this.getTypeOption);
+    }
+    if (category === TYPE_LIST.BUS.name) {
+      return TYPE_LIST.BUS.fields.map(this.getTypeOption);
+    }
+
+    if (category === TYPE_LIST.TRUCK.name) {
+      return TYPE_LIST.TRUCK.fields.map(this.getTypeOption);
+    }
+  }
+
+  getTypeOption({ fieldName }) {
+    return (
+      <Option key={fieldName} value={fieldName}>
+        {fieldName}
+      </Option>
+    );
+  }
+
+  getSpecificFormForType({ type }) {
+    if (type === TYPE_CONST.CLASSIC.type) {
+      return this.getFragment(TYPE_CONST.CLASSIC);
+    }
+    if (type === TYPE_CONST.CABRIOLET.type) {
+      return this.getFragment(TYPE_CONST.CABRIOLET);
+    }
+    if (type === TYPE_CONST.INTERCITY_BUS.type) {
+      return this.getFragment(TYPE_CONST.INTERCITY_BUS);
+    }
+    if (type === TYPE_CONST.CITY_BUS.type) {
+      return this.getFragment(TYPE_CONST.CITY_BUS);
+    }
+    if (type === TYPE_CONST.TOW_TRUCK.type) {
+      return this.getFragment(TYPE_CONST.TOW_TRUCK);
+    }
+    if (type === TYPE_CONST.TANK_TRUCK.type) {
+      return this.getFragment(TYPE_CONST.TANK_TRUCK);
+    }
+    return <div />;
+  }
 
   render() {
+    const state = this.state;
+    console.log(state);
+
     return (
-      <div>
+      <div className="page">
         <h2>Create Vehicle</h2>
         <Form
+         ref={this.formRef}
           {...layout}
           name="nest-messages"
           onFinish={this.onFinish}
+          onFieldsChange={this.onFieldsChange}
           validateMessages={validateMessages}
         >
           <Form.Item
-            name={["vehicle", "name"]}
+            name={["name"]}
             label="Name"
             rules={[
               {
-                required: true
-              }
+                required: true,
+              },
             ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name={["vehicle", "colour"]}
+            name={["colour"]}
             label="Colour"
             rules={[
               {
-                required: true
-              }
+                required: true,
+              },
             ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name={["vehicle", "category"]}
+            name={["category"]}
             label="Category"
             rules={[
               {
-                required: true
-              }
+                required: true,
+              },
             ]}
           >
             <Select placeholder="select category">
@@ -88,78 +361,21 @@ class CreateVehicle extends React.Component {
               <Option value="TRUCK">TRUCK</Option>
             </Select>
           </Form.Item>
+          {this.getSpecificFormForCategory(this.state)}
           <Form.Item
-            name={["vehicle", "type"]}
+            name={["type"]}
             label="Type"
             rules={[
               {
-                required: true
-              }
+                required: true,
+              },
             ]}
           >
             <Select placeholder="select type">
-              <Option value="CLASSIC">CLASSIC</Option>
-              <Option value="CABRIOLET">CABRIOLET</Option>
-              <Option value="CITY_BUS">CITY_BUS</Option>
-              <Option value="INTERCITY_BUS">INTERCITY_BUS</Option>
-              <Option value="TOW_TRUCK">TOW_TRUCK</Option>
-              <Option value="TANK_TRUCK">TANK_TRUCK</Option>
+              {this.getTypeOptions(this.state)}
             </Select>
           </Form.Item>
-          <h3>CAR</h3>
-          <Form.Item name={["vehicle", "seats"]} label="Seats">
-            <InputNumber />
-          </Form.Item>
-          <Form.Item name={["vehicle", "accessories"]} label="Accessories">
-            <InputNumber />
-          </Form.Item>
-          <h3>Classic Car</h3>
-          <Form.Item
-            name={["vehicle", "roofRackStorage"]}
-            label="Roof Rack Storage"
-          >
-            <InputNumber />
-          </Form.Item>
-          <h3>Cabriolet Car</h3>
-          <Form.Item
-            name={["vehicle", "detachableHardtops"]}
-            label="Detachable Hardtops"
-          >
-            <Checkbox onChange={() => {}}></Checkbox>
-          </Form.Item>
-          <h3>BUS</h3>
-          <Form.Item
-            name={["vehicle", "standingPlaces"]}
-            label="Standing Places"
-          >
-            <InputNumber />
-          </Form.Item>
-          <Form.Item name={["vehicle", "seatingPlaces"]} label="Seating Places">
-            <InputNumber />
-          </Form.Item>
-          <h3>Inetercity Bus</h3>
-          <Form.Item
-            name={["vehicle", "luggageCapacity"]}
-            label="Luggage Capacity"
-          >
-            <InputNumber />
-          </Form.Item>
-          <h3>City Bus</h3>
-          <Form.Item name={["vehicle", "articulated"]} label="Articulated">
-            <Checkbox onChange={() => {}}></Checkbox>
-          </Form.Item>
-          <h3>TRUCK</h3>
-          <Form.Item name={["vehicle", "axlesNumber"]} label="Axles Number">
-            <InputNumber />
-          </Form.Item>
-          <h3>Tank Truck</h3>
-          <Form.Item name={["vehicle", "tankCapacity"]} label="Tank Capacity">
-            <InputNumber />
-          </Form.Item>
-          <h3>Tow Truck</h3>
-          <Form.Item name={["vehicle", "tractionPower"]} label="Traction Power">
-            <InputNumber />
-          </Form.Item>
+          {this.getSpecificFormForType(this.state)}
 
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
             <Button type="primary" htmlType="submit">
