@@ -9,9 +9,10 @@ import {
   Checkbox,
   Switch
 } from "antd";
+import {RoutesPath} from "../../../config/Routes"
 import axios from "axios";
-
 const { Option } = Select;
+
 
 const layout = {
   labelCol: {
@@ -204,13 +205,13 @@ class CreateVehicle extends React.Component {
     type: null,
   };
 
-  formRef = React.createRef();
-
   onFinish = (values) => {
     console.log(values);
     axios
       .post("http://localhost:5000/api/car-factory/vehicle/create", values)
-      .then((p) => console.log(p))
+      .then((p) => {
+        this.props.history.push(RoutesPath.VEHICLE_REVIEW);
+      })
       .catch((error) => console.log(error));
   };
   onFieldsChange = (e, values) => {
@@ -312,6 +313,7 @@ class CreateVehicle extends React.Component {
   render() {
     const state = this.state;
     console.log(state);
+    console.log(this.props);
 
     return (
       <div className="page">

@@ -1,14 +1,15 @@
 package com.example.carfactory.application;
 
+import com.example.carfactory.application.dto.ParkedVehicle;
 import com.example.carfactory.application.dto.Parking;
 import com.example.carfactory.application.enums.ParkingEnum;
 import com.example.carfactory.application.enums.VehicleSurfaceEnum;
-import com.example.carfactory.infrastructure.model.VehicleDetails;
+import com.example.carfactory.application.mapper.VehicleMapper;
+import com.example.carfactory.infrastructure.model.VehicleBasicInfo;
 import com.example.carfactory.infrastructure.repository.VehicleDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,15 +23,31 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public List<Parking> getStatus() {
-        List<VehicleDetails> vehicles = vehicleDetailsRepository.findAll();
+        List<VehicleBasicInfo> vehicles = vehicleDetailsRepository.findAll();
+        List<Parking> parkings = Stream.of(ParkingEnum.values()).map(p -> {
+            Parking parking = new Parking();
+            parking.setName(p.getName());
+            parking.setSurface(p.getSurface());
+            return parking;
+        }).collect(Collectors.toList());
 
-        List<Parking> parkings = new ArrayList<>();
-        Parking parking2_5 = new Parking();
-        parkings.add(parking2_5);
-        parking2_5.setName(ParkingEnum.COVERED_2_5.getName());
-        parking2_5.setSurface(ParkingEnum.COVERED_2_5.getSurface());
-        populateParking(parking2_5, vehicles, 0);
-
+        for (VehicleBasicInfo vehicleBasicInfo : vehicles) {
+            for (Parking parking : parkings) {
+                if (parking.isFull()) {
+                    continue;
+                }
+                int vehicleSurface = getVehicleSurface(vehicleBasicInfo.getType());
+                if ((parking.getSurface() - parking.getOccupiedArea()) > vehicleSurface) {
+                    ParkedVehicle parkedVehicle = VehicleMapper.INSTANCE.mapParkedVehicle(vehicleBasicInfo);
+                    parkedVehicle.setSize(vehicleSurface);
+                    parking.getVehicles().add(parkedVehicle);
+                    parking.setOccupiedArea(parking.getOccupiedArea() + vehicleSurface);
+                    if ((parking.getSurface() - parking.getOccupiedArea()) < minVehicleSurface) {
+                        parking.setFull(true);
+                    }
+                }
+            }
+        }
 
         return parkings;
     }
@@ -48,19 +65,4 @@ public class ParkingServiceImpl implements ParkingService {
         return Stream.of(VehicleSurfaceEnum.values()).map(VehicleSurfaceEnum::getSurface).sorted().collect(Collectors.toList()).get(0);
     }
 
-    private void populateParking(Parking parking, List<VehicleDetails> vehicles, int index) {
-        if (parking.isFull() || vehicles.size() == index) {
-            return;
-        }
-        VehicleDetails vehicle = vehicles.get(index);
-        int vehicleSurface = getVehicleSurface(vehicle.getType());
-        if ((parking.getSurface() - parking.getOccupiedArea()) > vehicleSurface) {
-            parking.getVehicles().add(vehicle);
-            parking.setOccupiedArea(parking.getOccupiedArea() + vehicleSurface);
-            if ((parking.getSurface() - parking.getOccupiedArea()) < minVehicleSurface) {
-                parking.setFull(true);
-            }
-        }
-        populateParking(parking, vehicles, index++);
-    }
 }

@@ -1,18 +1,23 @@
 package com.example.carfactory.application;
 
 import com.example.carfactory.application.dto.CreateVehicleRequest;
+import com.example.carfactory.application.dto.VehicleBasicInfoDTO;
 import com.example.carfactory.application.dto.VehicleDetailsRequest;
 import com.example.carfactory.application.enums.RepositoryEnum;
 import com.example.carfactory.application.enums.VehicleRepositoryEnum;
+import com.example.carfactory.application.mapper.VehicleMapper;
 import com.example.carfactory.common.errorhandling.CarFactoryException;
 import com.example.carfactory.infrastructure.model.Vehicle;
 import com.example.carfactory.infrastructure.model.VehicleCategory;
+import com.example.carfactory.infrastructure.repository.VehicleDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -20,6 +25,16 @@ import java.util.stream.Stream;
 public class VehicleDetailsServiceImpl implements VehicleDetailsService {
     private final CreateVehicleService createVehicleService;
     private final Map<String, JpaRepository> repositoryMap;
+    private final VehicleDetailsRepository vehicleDetailsRepository;
+
+    @Override
+    public List<VehicleBasicInfoDTO> getAllVehicle() {
+        return vehicleDetailsRepository
+                .findAllByOrderByCreationDateDesc()
+                .stream()
+                .map(VehicleMapper.INSTANCE::mapVehicleBasicInfoDTO)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public Vehicle find(VehicleDetailsRequest request) {

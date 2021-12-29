@@ -1,7 +1,6 @@
 package com.example.carfactory.application.dto;
 
-import com.example.carfactory.infrastructure.model.Vehicle;
-import com.example.carfactory.infrastructure.model.VehicleDetails;
+import com.example.carfactory.infrastructure.model.VehicleBasicInfo;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,10 +11,10 @@ public class Parking {
     private String name;
     private int surface;
     private int occupiedArea;
-    private List<VehicleDetails> vehicles;
+    private List<ParkedVehicle> vehicles;
     private boolean full;
 
-    public List<VehicleDetails> getVehicles() {
+    public List<ParkedVehicle> getVehicles() {
         if (vehicles == null) {
             vehicles = new ArrayList<>();
         }

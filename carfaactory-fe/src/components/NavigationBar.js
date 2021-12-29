@@ -16,12 +16,13 @@ class NavigationBar extends Component {
     console.log("click ", e);
   };
   render() {
+    const { location } = this.props;
     return (
       <Menu
       theme="dark"
         onClick={this.handleClick}
         defaultSelectedKeys={[RoutesPath.VEHICLE_REVIEW]}
-        defaultOpenKeys={["sub1"]}
+        selectedKeys={[location.pathname]}
         mode="inline"
       >
         <Menu.Item key={RoutesPath.VEHICLE_REVIEW} icon={<AreaChartOutlined />}>

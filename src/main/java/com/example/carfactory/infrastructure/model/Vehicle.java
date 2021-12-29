@@ -13,5 +13,5 @@ public abstract class Vehicle {
     @OneToOne
     @JoinColumn(name = "ID")
     @MapsId
-    protected VehicleDetails vehicleDetails;
+    protected VehicleBasicInfo vehicleBasicInfo;
 }

@@ -4,7 +4,7 @@ import com.example.carfactory.application.dto.CreateVehicleRequest;
 import com.example.carfactory.application.enums.RepositoryEnum;
 import com.example.carfactory.application.mapper.VehicleMapper;
 import com.example.carfactory.infrastructure.model.Vehicle;
-import com.example.carfactory.infrastructure.model.VehicleDetails;
+import com.example.carfactory.infrastructure.model.VehicleBasicInfo;
 import com.example.carfactory.infrastructure.model.buses.CityBus;
 import com.example.carfactory.infrastructure.model.buses.InterCityBus;
 import com.example.carfactory.infrastructure.model.cars.CabrioletCar;
@@ -66,48 +66,48 @@ public class CreateVehicleServiceImpl implements CreateVehicleService {
     @Transactional
     private Vehicle createCabriolet(CabrioletCarRepository repository, CreateVehicleRequest request) {
         CabrioletCar vehicle = VehicleMapper.INSTANCE.mapCabrioletCar(request);
-        VehicleDetails vehicleDetails = VehicleMapper.INSTANCE.map(request);
-        vehicle.setVehicleDetails(vehicleDetails);
+        VehicleBasicInfo vehicleBasicInfo = VehicleMapper.INSTANCE.mapVehicleBasicInfo(request);
+        vehicle.setVehicleBasicInfo(vehicleBasicInfo);
         return repository.save(vehicle);
     }
 
     @Transactional
     private Vehicle createClassicCar(ClassicCarRepository repository, CreateVehicleRequest request) {
         ClassicCar vehicle = VehicleMapper.INSTANCE.mapClassicCar(request);
-        VehicleDetails vehicleDetails = VehicleMapper.INSTANCE.map(request);
-        vehicle.setVehicleDetails(vehicleDetails);
+        VehicleBasicInfo vehicleBasicInfo = VehicleMapper.INSTANCE.mapVehicleBasicInfo(request);
+        vehicle.setVehicleBasicInfo(vehicleBasicInfo);
         return repository.save(vehicle);
     }
 
     @Transactional
     private Vehicle createTowTruck(TowTruckRepository repository, CreateVehicleRequest request) {
         TowTruck vehicle = VehicleMapper.INSTANCE.mapTowTruck(request);
-        VehicleDetails vehicleDetails = VehicleMapper.INSTANCE.map(request);
-        vehicle.setVehicleDetails(vehicleDetails);
+        VehicleBasicInfo vehicleBasicInfo = VehicleMapper.INSTANCE.mapVehicleBasicInfo(request);
+        vehicle.setVehicleBasicInfo(vehicleBasicInfo);
         return repository.save(vehicle);
     }
 
     @Transactional
     private Vehicle createTankTruck(TankTruckRepository repository, CreateVehicleRequest request) {
         TankTruck vehicle = VehicleMapper.INSTANCE.mapTankTruck(request);
-        VehicleDetails vehicleDetails = VehicleMapper.INSTANCE.map(request);
-        vehicle.setVehicleDetails(vehicleDetails);
+        VehicleBasicInfo vehicleBasicInfo = VehicleMapper.INSTANCE.mapVehicleBasicInfo(request);
+        vehicle.setVehicleBasicInfo(vehicleBasicInfo);
         return repository.save(vehicle);
     }
 
     @Transactional
     private Vehicle createCityBus(CityBusRepository repository, CreateVehicleRequest request) {
         CityBus vehicle = VehicleMapper.INSTANCE.mapCityBus(request);
-        VehicleDetails vehicleDetails = VehicleMapper.INSTANCE.map(request);
-        vehicle.setVehicleDetails(vehicleDetails);
+        VehicleBasicInfo vehicleBasicInfo = VehicleMapper.INSTANCE.mapVehicleBasicInfo(request);
+        vehicle.setVehicleBasicInfo(vehicleBasicInfo);
         return repository.save(vehicle);
     }
 
     @Transactional
     private Vehicle createInterCityBus(InterCityBusRepository repository, CreateVehicleRequest request) {
         InterCityBus vehicle = VehicleMapper.INSTANCE.mapInterCityBus(request);
-        VehicleDetails vehicleDetails = VehicleMapper.INSTANCE.map(request);
-        vehicle.setVehicleDetails(vehicleDetails);
+        VehicleBasicInfo vehicleBasicInfo = VehicleMapper.INSTANCE.mapVehicleBasicInfo(request);
+        vehicle.setVehicleBasicInfo(vehicleBasicInfo);
         return repository.save(vehicle);
     }
 }

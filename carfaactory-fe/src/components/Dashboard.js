@@ -7,6 +7,15 @@ const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
 
 class Dashboard extends Component {
+
+  state = {
+    reload: false
+  }
+
+  reload = () => {
+    this.setState({reload: !this.state.reload})
+  }
+
   handleClick = (e) => {
     console.log("click ", e);
   };
@@ -30,7 +39,7 @@ class Dashboard extends Component {
           </Sider>
           <Layout>
             <Content className="dashboard-main-content">
-              <Routes />
+              <Routes reload={this.reload}/>
             </Content>
           </Layout>
         </Layout>
