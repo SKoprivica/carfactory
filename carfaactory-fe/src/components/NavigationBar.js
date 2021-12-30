@@ -13,7 +13,7 @@ import {
 
 class NavigationBar extends Component {
   handleClick = (e) => {
-    console.log("click ", e);
+ 
   };
   render() {
     const { location } = this.props;
