@@ -46,6 +46,7 @@ public class ParkingServiceImpl implements ParkingService {
                         parking.setFull(true);
                     }
                 }
+                break;
             }
         }
 

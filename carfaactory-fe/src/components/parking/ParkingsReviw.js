@@ -24,32 +24,38 @@ class ParkingsReview extends React.Component {
     return (
       <div className="page">
         <h2>Parking Review</h2>
-        <Space>{this.state.parkings.map(parking => <Parking data={parking}/>)}</Space>
+        <Space>{this.state.parkings.map(parking => <Parking data={parking} />)}</Space>
       </div>
     );
   }
 }
 
+const noOcupied = {padding: 20, border: 'solid', borderColor: '#bae7ff', with: "200" }
+const ocupied = {padding: 20,border: 'solid', borderColor: '#ff7875' }
 const Parking = ({ data }) => {
   return (
-    <Space direction="vertical">
+    <Space direction="vertical" >
+      <div direction="vertical" style={data.full ? ocupied : noOcupied} >
+        <div >
+          <Text strong>Name: </Text>
+          <Text>{data.name}</Text>
+        </div>
+        <div>
+          <Text strong>Surface: </Text>
+          <Text>{data.surface}</Text>
+        </div>
+        <div>
+          <Text strong>Occupied Area: </Text>
+          <Text>{data.occupiedArea}</Text>
+        </div>
+        <div>
+          <Text strong>Full </Text>
+          <Text>{data.full ? "YES" : "NO"}</Text>
+        </div>
+      </div>
       <Space>
-        <Text strong>Name: </Text>
-        <Text>{data.name}</Text>
+        <VehicleTable vehicles={data.vehicles} />
       </Space>
-      <Space>
-        <Text strong>Surface: </Text>
-        <Text>{data.surface}</Text>
-      </Space>
-      <Space>
-        <Text strong>Occupied Area: </Text>
-        <Text>{data.occupiedArea}</Text>
-      </Space>
-      <Space>
-        <Text strong>Full </Text>
-        <Text>{data.full ? "YES" : "NO"}</Text>
-      </Space>
-      <VehicleTable vehicles={data.vehicles} />
     </Space>
   );
 };
