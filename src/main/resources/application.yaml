@@ -2,11 +2,10 @@ server:
   port: 5000
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    platform: postgres
-    username: tatul
-    password: tatul123
-    driverClassName: org.postgresql.Driver
+    url: jdbc:mysql://localhost:3306/db_example
+    username: springuser
+    password: ThePassword
+    driverClassName: com.mysql.cj.jdbc.Driver
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -15,9 +14,9 @@ spring:
       maximum-pool-size: 30 # maximum pool size (https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing)
       idle-timeout: 600000 # maximum idle time in milliseconds for connection
       max-lifetime: 1800000 # maximum lifetime in milliseconds of a connection in the pool after it is closed
-      pool-name: Tatul
+      pool-name: CarFactory
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL82Dialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect
     generate-ddl: true
 
     hibernate:
