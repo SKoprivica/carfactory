@@ -247,7 +247,7 @@ const VehicleBasicInfo = ({ details }) => {
         {arr.map((field) => (
           <Space key={field.name}>
             <Text strong>{_.startCase(field.name)}: </Text>
-            <Text>{JSON.stringify(field.value)}</Text>
+            <Text>{getValue(field)}</Text>
           </Space>
         ))}
       </Space>
@@ -256,3 +256,11 @@ const VehicleBasicInfo = ({ details }) => {
 };
 
 export default VehicleTable;
+
+function getValue(field) {
+  if(Array.isArray(field.value)){
+    return field.value.join(", ")
+  }
+  return JSON.stringify(field.value);
+}
+

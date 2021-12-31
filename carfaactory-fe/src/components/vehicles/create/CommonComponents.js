@@ -1,7 +1,8 @@
 import {
     Typography,
     Form,
-    Select
+    Select,
+    Space
 
 } from "antd";
 import { getPropsForCategory, getTypeFieldsArrayForCategory, getPropsForType } from "./constantsFunctions";
@@ -47,23 +48,26 @@ const getTypeOption = ({ fieldName }) => {
 
 export const Fragment = ({ title, fields }) => {
     return (
-        <>
+        <div>
             <Title level={3}>{title}</Title>
             {fields.map((p) => <Field key={p.fieldName} {...p} />)}
-        </>
+        </div>
     );
 }
 
 export const Field = ({ fieldName, label, component }) => {
     return (
+      
         <Form.Item
             key={fieldName}
             name={fieldName}
             label={label}
             valuePropName="checked"
+   
         >
             {component}
         </Form.Item>
+   
     );
 }
 

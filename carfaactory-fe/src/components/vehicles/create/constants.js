@@ -10,6 +10,7 @@ import {
     Typography,
     Space
 } from "antd";
+import Accessories from "./Accessories";
 
 
 export const TYPE_LIST = {
@@ -62,7 +63,7 @@ export const CATEGORY_CONST = {
             {
                 fieldName: "accessories",
                 label: "Accessories",
-                component: <InputNumber />,
+                component: <Accessories />,
             },
         ],
     },
