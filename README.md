@@ -26,6 +26,7 @@ Start Docker Container
 docker run --name car-factory-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d --restart=always -p 3306:3306  mysql
 ```
 Setup username and pass form application.yaml
+
 Start BE:
 ```sh
 mvn spring-boot:run
